@@ -7,6 +7,7 @@ import (
 	"prodigy-program/db"
 	"prodigy-program/repos"
 	"prodigy-program/service"
+	dayplan "prodigy-program/transport/dayPlan"
 	"prodigy-program/transport/user"
 	"prodigy-program/transport/weekPlan"
 )
@@ -20,10 +21,13 @@ func main() {
 	weekPlanRepo := repos.NewWeekPlanRepository(db.DB)
 	weekPlanService := service.NewWeekPlanService(weekPlanRepo)
 
+	dayPlanRepo := repos.NewDayPlanRepoitory(db.DB)
+	dayPlanService := service.NewDayPlanService(dayPlanRepo)
+
 	// Create the HTTP handler
 	userHandler := user.NewHTTPHandler(userService)
 	weekPlanHandler := weekPlan.NewWeekPlanHandler(weekPlanService)
-
+	dayPlanHandler := dayplan.NewDayPlanHandler(dayPlanService)
 
 
 
@@ -32,6 +36,7 @@ func main() {
 	mux.Handle("/registerUser", userHandler)
 	mux.Handle("/weekplan", weekPlanHandler)
 	mux.Handle("/getweekplan", weekPlanHandler)
+	mux.Handle("/updatedayplan", dayPlanHandler)
 
 	// Start the server
 	log.Println("Server started on :8080")
