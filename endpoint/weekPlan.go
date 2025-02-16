@@ -15,11 +15,12 @@ type CreateWeekPlanRequest struct {
 type CreateWeekPlanResponse struct {
 	Code    int    `json:"code"`
 	Success string `json:"success"`
-	WeekID  int    `json:"week_id"`
+	WeekID  int    `json:"weekId"`
 }
 
 type GetWeekPlanRequest struct {
-	ID int `json:"id"`
+	ID        int `json:"id"`
+	DayNumber int `json:"dayNumber"`
 }
 
 func MakeCreateWeekPlanEndpoint(svc service.WeekPlanService) endpoint.Endpoint {
@@ -30,5 +31,17 @@ func MakeCreateWeekPlanEndpoint(svc service.WeekPlanService) endpoint.Endpoint {
 			return nil, err
 		}
 		return CreateWeekPlanResponse{Code: 200, Success: "success", WeekID: id}, nil
+	}
+}
+
+func MakeGetWeekPlanByWeekIdEndpoint(svc service.WeekPlanService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(GetWeekPlanRequest)
+		res, err := svc.GetWeekPlanByID(req.ID, &req.DayNumber)
+		if err != nil {
+			return nil, err
+		}
+
+		return res, nil
 	}
 }

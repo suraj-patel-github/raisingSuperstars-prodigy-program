@@ -2,12 +2,13 @@ package service
 
 import (
 	"prodigy-program/repos"
+	"prodigy-program/types"
 )
 
 
 type WeekPlanService interface {
 	CreateWeekPlan(description string, userID int) (int, error)
-	GetWeekPlanByID(id int) (map[string]interface{}, error)
+	GetWeekPlanByID(weekID int, dayNumber *int) (*types.WeekPlanResponse, error)
 }
 
 type weekPlanService struct {
@@ -22,15 +23,6 @@ func (s *weekPlanService) CreateWeekPlan(description string, userID int) (int, e
 	return s.repo.CreateWeekPlan(description, userID)
 }
 
-func (s *weekPlanService) GetWeekPlanByID(id int) (map[string]interface{}, error) {
-	weekPlan, err := s.repo.GetWeekPlanByID(id)
-	if err != nil {
-		return nil, err
-	}
-
-	return map[string]interface{}{
-		"id":          weekPlan.ID,
-		"description": weekPlan.Description,
-		"created_at":  weekPlan.CreatedAt,
-	}, nil
+func (s *weekPlanService) GetWeekPlanByID(weekID int, dayNumber *int) (*types.WeekPlanResponse, error) {
+	return s.repo.GetWeekPlan(weekID, dayNumber)
 }

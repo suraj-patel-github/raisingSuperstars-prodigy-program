@@ -24,10 +24,14 @@ func main() {
 	userHandler := user.NewHTTPHandler(userService)
 	weekPlanHandler := weekPlan.NewWeekPlanHandler(weekPlanService)
 
+
+
+
 	// Create a main router (mux) to combine handlers
 	mux := http.NewServeMux()
 	mux.Handle("/registerUser", userHandler)
-	mux.Handle("/weekplan", weekPlanHandler) 
+	mux.Handle("/weekplan", weekPlanHandler)
+	mux.Handle("/getweekplan", weekPlanHandler)
 
 	// Start the server
 	log.Println("Server started on :8080")

@@ -7,6 +7,8 @@ As per my understanding there will 5 APIs.
     (There should be a cron which automatically runs every saturday or any day of the week, which will populate the db with the whole week plan).
 
 2. To show the "Suggested - Day wise", We will be having a get API.
+    2.1 - Get the week plan
+    2.2 - get the day plan
 
 3. To mark the progress for that particular day by the user, we will have 2 APIs
     3.1- Get the remaining activities for the day.
@@ -21,12 +23,12 @@ Schema:
     id, name, email
 
 1. WeekPlan
-    id, userId, Desc
+    id, Desc
 
 3. Activity Desc(master table)
     id, category, time, freq, activity.
     The data will be almost constant.
 
 2. Day plan
-    id, weekId(FK), activityId(FK)
+    id, user_id(FK), weekId(FK), activityId(FK), day_number, completed_at, created_at, updated_at
 

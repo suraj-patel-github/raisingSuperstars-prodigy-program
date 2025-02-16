@@ -38,9 +38,10 @@ CREATE TABLE WeekPlan (
 -- completed_at is Null means the activity is not yet completed.
 CREATE TABLE DayPlan (
     id SERIAL PRIMARY KEY,
-    userId INT REFERENCES Users(id) ON DELETE CASCADE,
-    weekId INT REFERENCES WeekPlan(id) ON DELETE CASCADE,
-    activityId INT REFERENCES ActivityDesc(id) ON DELETE CASCADE,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
+    week_id INT REFERENCES WeekPlan(id) ON DELETE CASCADE,
+    activity_id INT REFERENCES ActivityDesc(id) ON DELETE CASCADE,
+    day_number INT NOT NULL,
     completed_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()

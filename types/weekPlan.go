@@ -10,10 +10,29 @@ type WeekPlan struct {
 
 type DayPlan struct {
 	ID          int        `json:"id"`
-	UserID      int        `json:"user_id"`
-	WeekID      int        `json:"week_id"`
-	ActivityID  int        `json:"activity_id"`
-	CompletedAt *time.Time `json:"completed_at"`
+	UserID      int        `json:"userId"`
+	WeekID      int        `json:"weekId"`
+	ActivityID  int        `json:"activityId"`
+	CompletedAt *time.Time `json:"completedAt"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
+}
+
+type WeekPlanResponse struct {
+	WeekID      int                `json:"weekId"`
+	Description string             `json:"description"`
+	DayPlans    map[int][]Activity `json:"days"`
+}
+
+type Activity struct {
+	ID           int       `json:"id,omitempty"`
+	UserID       int       `json:"userId"`
+	WeekID       int       `json:"weekId"`
+	ActivityID   int       `json:"activityId"`
+	DayNumber    int       `json:"dayNumber"`
+	Category     string    `json:"category"`
+	ActivityName string    `json:"activity_name"`
+	Time         string    `json:"time"`
+	Frequency    string    `json:"frequency"`
+	CompletedAt  time.Time `json:"completedAt,omitempty"`
 }

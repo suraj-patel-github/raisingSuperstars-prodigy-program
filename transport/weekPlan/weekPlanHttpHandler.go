@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"prodigy-program/endpoint"
 	"prodigy-program/service"
+	"strconv"
 
 	httptransport "github.com/go-kit/kit/transport/http"
 )
@@ -19,7 +20,14 @@ func NewWeekPlanHandler(svc service.WeekPlanService) http.Handler {
 		encodeResponse,
 	)
 
+	getWeekPlanHandler := httptransport.NewServer(
+		endpoint.MakeGetWeekPlanByWeekIdEndpoint(svc),
+		decodeGetWeekPlanRequest,
+		encodeResponse,
+	)
+
 	mux.Handle("/weekplan", createWeekPlanHandler)
+	mux.Handle("/getweekplan", getWeekPlanHandler)
 	return mux
 }
 
@@ -28,6 +36,33 @@ func decodeCreateWeekPlanRequest(_ context.Context, r *http.Request) (interface{
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
 	}
+	return req, nil
+}
+
+// Decode request for getting a week plan by ID
+func decodeGetWeekPlanRequest(_ context.Context, r *http.Request) (interface{}, error) {
+
+	req := endpoint.GetWeekPlanRequest{}
+	queryParams := r.URL.Query()
+	weekIDStr := queryParams.Get("weekId")
+	if weekIDStr == "" {
+		return nil, http.ErrMissingFile // Return an error if week_id is missing
+	}
+	weekID, err := strconv.Atoi(weekIDStr)
+	if err != nil {
+		return nil, err
+	}
+	req.ID = weekID
+
+	dayNumberStr := queryParams.Get("dayNumber")
+	if dayNumberStr != "" {
+		dayNUmber, err := strconv.Atoi(dayNumberStr)
+		if err != nil {
+			return nil, err
+		}
+		req.DayNumber = dayNUmber
+	}
+
 	return req, nil
 }
 
